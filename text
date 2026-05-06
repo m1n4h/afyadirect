@@ -1,0 +1,115 @@
+
+## 🚀 Technology Stack
+
+### Frontend
+- **Framework**: Flutter 3.16+
+- **State Management**: Provider
+- **Backend Services**: Firebase (Auth, Firestore, Storage)
+- **UI Components**: Custom widgets with animations
+
+### Backend
+- **Framework**: FastAPI (Python 3.11+)
+- **Database**: Firebase Firestore
+- **Authentication**: Firebase Auth + JWT
+- **Real-time**: WebSockets
+- **Payments**: M-Pesa, Tigo Pesa, Airtel Money APIs
+- **Notifications**: FCM, Africa's Talking SMS, SendGrid Email
+- **Async Tasks**: Celery + Redis
+
+## 📋 Prerequisites
+
+### For Flutter Frontend
+- Flutter SDK 3.16.0 or higher
+- Dart SDK 3.2.0 or higher
+- Android Studio / VS Code
+- iOS Simulator (Mac) or Android Emulator
+- Firebase Account
+
+### For Python Backend
+- Python 3.11 or higher
+- pip (Python package manager)
+- Redis Server (for caching & Celery)
+- Firebase Admin SDK credentials
+
+## 🔧 Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/afyadirect.git
+cd afyadirect
+
+# 2. Backend Setup (Python)
+
+cd backend
+
+# Create virtual environment
+python3 -m venv venv
+
+# Activate virtual environment
+# On Linux/Mac:
+source venv/bin/activate
+
+# On Windows:
+# venv\Scripts\activate
+
+pip install --upgrade pip
+pip install -r requirements.txt
+
+#start redis
+
+# Using Docker
+docker run -d --name redis -p 6379:6379 redis:alpine
+
+# Or using system package manager
+# Ubuntu/Debian:
+sudo apt-get install redis-server
+sudo service redis-server start
+
+# Mac:
+brew install redis
+brew services start redis
+
+
+
+
+
+#RUN BACKEND
+# Development mode with auto-reload
+python run.py
+
+# Or using uvicorn directly
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+# Production mode with gunicorn
+gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+
+# verify the backrnd is running
+curl http://localhost:8000/health
+# Should return: {"status":"healthy","service":"AfyaDirect API","version":"1.0.0"}
+
+
+
+API Documentation: http://localhost:8000/api/docs
+
+
+
+
+#  Install Flutter Dependencies
+cd ../frontend  # or cd .. if you're in backend folder
+
+# Get Flutter packages
+flutter pub get
+
+# Configure Firebase for Flutter
+# Install FlutterFire CLI:
+
+
+dart pub global activate flutterfire_cli
+
+#CONFIG FIREBASE:
+# Login to Firebase
+firebase login
+ Initialize Firebase in Flutter project
+flutterfire configure --project=afyadirect-xxxxx
+

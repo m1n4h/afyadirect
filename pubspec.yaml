@@ -1,0 +1,71 @@
+name: afyadirect
+description: A telemedicine platform for East Africa
+publish_to: 'none'
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Corrected: flutter_localizations must be at the same level as flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Firebase
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.14.0
+  firebase_storage: ^11.6.0
+
+  # State Management (Keep only the latest version)
+  provider: ^6.1.1
+
+  # UI
+  flutter_svg: ^2.0.9
+  lottie: ^2.7.0
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+
+  # Storage
+  shared_preferences: ^2.2.2
+
+  # Networking
+  http: ^1.1.0
+  dio: ^5.3.3
+
+  # Utilities
+  intl: ^0.20.1
+
+  # Charts
+  fl_chart: ^0.68.0
+
+  # Files & Images
+  image_picker: ^1.0.5
+  file_picker: ^8.0.0
+  url_launcher: ^6.2.1
+
+  # Notifications
+  firebase_messaging: ^14.7.10
+  flutter_local_notifications: ^17.2.1
+
+  # Chat & Video
+  agora_rtc_engine: ^6.5.3
+
+  # PDF
+  pdf: ^3.10.7
+  printing: ^5.11.1
+
+  # Validation
+  email_validator: ^2.1.17
+
+  # Animation
+  animations: ^2.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true

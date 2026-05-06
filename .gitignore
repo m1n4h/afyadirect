@@ -1,0 +1,332 @@
+# ============================================
+# Dart / Flutter
+# ============================================
+# Flutter/Dart Pub
+.dart_tool/
+.pub/
+.pub-cache/
+.packages
+build/
+flutter_*.png
+flutter_*.jpg
+*.lock
+*.g.dart
+*.freezed.dart
+*.gen.dart
+
+# Android related
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/app/src/main/res/drawable-*/launch_background.xml
+**/android/app/src/main/res/values/strings.xml
+**/android/key.properties
+
+# iOS related
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/xcuserdata
+**/ios/**/.project.pbxproj
+**/ios/**/.project.xcworkspace
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# macOS
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/ephemeral/
+**/macos/Flutter/flutter_export_environment.sh
+**/macos/Runner.xcworkspace/xcuserdata/
+**/macos/Runner.xcodeproj/project.xcworkspace/xcuserdata/
+**/macos/Runner.xcodeproj/xcuserdata/
+
+# Windows
+**/windows/flutter/generated_plugins.cmake
+**/windows/flutter/generated_plugin_registrant.cc
+**/windows/flutter/generated_plugin_registrant.h
+**/windows/runner/Debug/
+**/windows/runner/Release/
+**/windows/runner/x64/
+**/windows/runner/win32/
+
+# Linux
+**/linux/flutter/generated_plugins.cmake
+**/linux/flutter/generated_plugin_registrant.cc
+**/linux/flutter/generated_plugin_registrant.h
+
+# Web
+**/web/index.html
+**/web/manifest.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+*.iws
+*.ipr
+.settings/
+.classpath
+.project
+
+# ============================================
+# Python Backend
+# ============================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.dll
+
+# C extensions
+*.c
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.envrc
+.env.local
+.env.production
+.env.staging
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# ============================================
+# Firebase
+# ============================================
+# Firebase Admin SDK
+firebase-adminsdk.json
+firebase-adminsdk-*.json
+
+# Firebase config (keep example file)
+*.p12
+*.p8
+GoogleService-Info.plist
+google-services.json
+
+# ============================================
+# Environment files
+# ============================================
+.env
+.env.*
+!.env.example
+
+# ============================================
+# Logs and databases
+# ============================================
+*.log
+*.sql
+*.sqlite
+*.db
+
+# ============================================
+# OS generated files
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# ============================================
+# Temporary files
+# ============================================
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ============================================
+# Backup files
+# ============================================
+*.backup
+*.backup.*
+*.old
+*.orig
+
+# ============================================
+# Secrets and keys
+# ============================================
+*.key
+*.pem
+*.crt
+*.cer
+*.der
+secrets/
+keys/
+
+# ============================================
+# Node modules (if any)
+# ============================================
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ============================================
+# Docker
+# ============================================
+docker-compose.override.yml
+*.pid
+
+
+afyadirect_service_key.json
+
+*.json
+!google-services.json
