@@ -1,6 +1,6 @@
 # app/main.py (Updated)
-from backend.app.dependencies import get_current_user
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from .dependencies import get_current_user
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect,Depends
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging

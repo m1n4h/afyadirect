@@ -1,6 +1,7 @@
 # app/routers/auth.py
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pydantic import BaseModel
 from typing import Dict, Any
 from datetime import datetime, timedelta
 import jwt
@@ -124,10 +125,64 @@ async def login(credentials: UserLogin):
         "role": user_data.get('role'),
         "full_name": user_data.get('fullName')
     }
-    
-    
-    
-    
+
+
+
+
+class GoogleLogin(BaseModel):
+    token: str
+
+
+@router.post("/google", response_model=Dict[str, Any])
+async def google_login(payload: GoogleLogin):
+    try:
+        decoded_token = auth.verify_id_token(payload.token)
+        uid = decoded_token.get('uid')
+        if not uid:
+            raise HTTPException(status_code=401, detail='Invalid Google token')
+
+        user_data = await FirebaseService.get_user(uid)
+        if not user_data:
+            firebase_user = auth.get_user(uid)
+            full_name = firebase_user.display_name or 'Afya Patient'
+            email = firebase_user.email or ''
+            user_data = {
+                'uid': uid,
+                'fullName': full_name,
+                'email': email,
+                'phone': firebase_user.phone_number or '',
+                'role': 'patient',
+                'language': 'en',
+                'isActive': True,
+                'createdAt': google_firestore.SERVER_TIMESTAMP,
+                'updatedAt': google_firestore.SERVER_TIMESTAMP,
+                'fcmToken': '',
+                'profileImage': '',
+            }
+            FirebaseService.get_db().collection('users').document(uid).set(user_data)
+            FirebaseService.get_db().collection('patients').document(uid).set({
+                'userId': uid,
+                'dateOfBirth': None,
+                'address': '',
+                'bloodGroup': '',
+                'allergies': '',
+                'medicalHistory': '',
+                'emergencyContact': '',
+                'insuranceInfo': '',
+                'createdAt': google_firestore.SERVER_TIMESTAMP
+            })
+        else:
+            full_name = user_data.get('fullName')
+
+        return {
+            'role': user_data.get('role', 'patient'),
+            'user_id': uid,
+            'full_name': full_name
+        }
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f'Google authentication failed: {e}')
+
+
 @router.post("/refresh")
 async def refresh_token(refresh_token: str):
     """Refresh access token"""

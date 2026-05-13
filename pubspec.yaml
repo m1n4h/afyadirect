@@ -12,10 +12,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
     # Google Sign-In
-  google_sign_in: ^6.1.5
+  google_sign_in: ^6.2.1
   
   # For web Google Sign-In
-  firebase_auth_web: ^5.8.0
+  # firebase_auth_web: ^5.8.0
 
   # Firebase
   firebase_core: ^2.24.2
