@@ -2,7 +2,7 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from datetime import datetime, timedelta
 import jwt
 from ..config import settings
@@ -223,3 +223,122 @@ async def reset_password(email: str):
         return {"message": "Password reset email sent"}
     except Exception as e:
         raise HTTPException(status_code=404, detail="User not found")
+
+
+class SyncPayload(BaseModel):
+    token: str
+    full_name: Optional[str] = None
+    role: Optional[str] = None
+    phone: Optional[str] = None
+    specialty: Optional[str] = None
+    license_number: Optional[str] = None
+    consultation_fee: Optional[float] = None
+
+
+@router.post("/sync", response_model=Dict[str, Any])
+async def sync_auth(payload: SyncPayload):
+    """Synchronize Firebase-authenticated user with Firestore and return role info."""
+    try:
+        decoded = auth.verify_id_token(payload.token)
+        uid = decoded.get('uid')
+        if not uid:
+            raise HTTPException(status_code=401, detail='Invalid token')
+
+        db = FirebaseService.get_db()
+        user_data = await FirebaseService.get_user(uid)
+
+        # If user doesn't exist in Firestore, create a default profile
+        if not user_data:
+            role = payload.role or 'patient'
+            firebase_user = auth.get_user(uid)
+            full_name = payload.full_name or firebase_user.display_name or ''
+            email = firebase_user.email or ''
+            phone = payload.phone or (firebase_user.phone_number or '')
+
+            new_user = {
+                'uid': uid,
+                'fullName': full_name,
+                'email': email,
+                'phone': phone,
+                'role': role,
+                'language': 'en',
+                'isActive': True,
+                'createdAt': google_firestore.SERVER_TIMESTAMP,
+                'updatedAt': google_firestore.SERVER_TIMESTAMP,
+                'fcmToken': '',
+                'profileImage': '',
+            }
+
+            db.collection('users').document(uid).set(new_user)
+
+            if role == 'patient':
+                db.collection('patients').document(uid).set({
+                    'userId': uid,
+                    'dateOfBirth': None,
+                    'address': '',
+                    'bloodGroup': '',
+                    'allergies': '',
+                    'medicalHistory': '',
+                    'emergencyContact': '',
+                    'insuranceInfo': '',
+                    'createdAt': google_firestore.SERVER_TIMESTAMP
+                })
+            elif role == 'doctor':
+                db.collection('doctors').document(uid).set({
+                    'userId': uid,
+                    'specialty': payload.specialty or '',
+                    'licenseNumber': payload.license_number or '',
+                    'consultationFee': payload.consultation_fee or 0,
+                    'isVerified': False,
+                    'rating': 0,
+                    'createdAt': google_firestore.SERVER_TIMESTAMP
+                })
+
+            user_data = new_user
+        else:
+            # Update existing user with any provided fields
+            updates = {}
+            if payload.full_name:
+                updates['fullName'] = payload.full_name
+            if payload.role:
+                updates['role'] = payload.role
+            if payload.phone:
+                updates['phone'] = payload.phone
+
+            if updates:
+                db.collection('users').document(uid).update(updates)
+
+            # If role-specific data for doctor provided, ensure doctor doc exists/updated
+            if payload.role == 'doctor' or payload.license_number or payload.specialty:
+                doc_ref = db.collection('doctors').document(uid)
+                doc = doc_ref.get()
+                if not doc.exists:
+                    doc_ref.set({
+                        'userId': uid,
+                        'specialty': payload.specialty or '',
+                        'licenseNumber': payload.license_number or '',
+                        'consultationFee': payload.consultation_fee or 0,
+                        'isVerified': False,
+                        'rating': 0,
+                        'createdAt': google_firestore.SERVER_TIMESTAMP
+                    })
+                else:
+                    doctor_updates = {}
+                    if payload.specialty:
+                        doctor_updates['specialty'] = payload.specialty
+                    if payload.license_number:
+                        doctor_updates['licenseNumber'] = payload.license_number
+                    if payload.consultation_fee is not None:
+                        doctor_updates['consultationFee'] = payload.consultation_fee
+                    if doctor_updates:
+                        doc_ref.update(doctor_updates)
+
+            user_data = await FirebaseService.get_user(uid)
+
+        return {
+            'role': user_data.get('role', 'patient'),
+            'user_id': uid,
+            'full_name': user_data.get('fullName')
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f'Sync failed: {e}')

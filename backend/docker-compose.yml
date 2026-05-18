@@ -1,17 +1,18 @@
+name: afyadirect-v3
+
 services:
   backend:
     build: .
-    container_name: afyadirect-backend
+    # REMOVED hardcoded container_name to prevent kernel lock collisions
+    init: true # CRITICAL: Forwards signals cleanly and harvests zombie processes automatically
     ports:
       - "8000:8000"
     environment:
-      # Use the service name 'redis_new' as the hostname
       - REDIS_URL=redis://redis_new:6379
       - APP_ENV=production
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - ALLOWED_FILE_TYPES=["image/jpeg","image/png"]
-
     depends_on:
       - redis_new
     volumes:
@@ -25,25 +26,24 @@ services:
   redis_new:
     image: redis:7-alpine
     container_name: afyadirect-redis-v2
-    privileged: true  # <--- Add this
-    init: true  # <--- CRITICAL: Prevents the "permission denied" zombie state
+    privileged: true  
+    init: true  
     ports:
       - "6379:6379"
     volumes:
       - redis-data-v2:/data
-    restart: always # <--- Changed to always for better recovery
+    restart: always 
     networks:
       - afyadirect-network
 
   celery-worker:
     build: .
-    container_name: afyadirect-celery-worker
-    # Ensure this path matches your directory structure (e.g., app/worker.py)
+    init: true # Prevents unyielding celery child forks from hanging the kernel
     command: celery -A app.worker worker --loglevel=info
     environment:
       - REDIS_URL=redis://redis_new:6379
       - APP_ENV=production
-      - PYTHONPATH=/app # <--- Helps Celery find your modules
+      - PYTHONPATH=/app 
     depends_on:
       - redis_new
       - backend
@@ -55,7 +55,7 @@ services:
 
   celery-beat:
     build: .
-    container_name: afyadirect-celery-beat
+    init: true
     command: celery -A app.worker beat --loglevel=info
     environment:
       - REDIS_URL=redis://redis_new:6379
